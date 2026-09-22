@@ -1,0 +1,14 @@
+{
+  "extraction_cases": 8,
+  "exact_match": 1.0,
+  "retrieval_cases": 3,
+  "hit_at_1": 1.0,
+  "scope": "handwritten smoke examples; no live LLM quality evaluation",
+  "known_counterexample": {
+    "input": "不要求 Python",
+    "actual": [
+      "Python"
+    ],
+    "desired_semantic_required_skills": []
+  }
+}

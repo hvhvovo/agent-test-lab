@@ -1,0 +1,11 @@
+{
+  "scope": "offline API via in-process TestClient, sequential, SQLite write included",
+  "requests": 100,
+  "warmup": 5,
+  "concurrency": 1,
+  "python": "3.12.14",
+  "platform": "Linux",
+  "median_ms": 1.328,
+  "p95_ms": 2.047,
+  "max_ms": 17.492
+}

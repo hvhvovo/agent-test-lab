@@ -1,0 +1,17 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Agent Test Lab · 求职分析</title>
+<style>body{font:16px/1.65 system-ui,sans-serif;background:#f4f6fa;color:#18263d;max-width:1000px;margin:40px auto;padding:0 22px}h1{font-size:34px;margin-bottom:0}small{color:#516079}section{background:white;border:1px solid #dbe1eb;border-radius:14px;padding:24px;margin:22px 0}label{display:block;font-weight:600;margin:12px 0 6px}textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #adb9cb;border-radius:8px;font:inherit}button,select{font:inherit;padding:9px 16px;border-radius:8px;border:1px solid #b3c0d3}button{background:#244fad;color:white;cursor:pointer;margin:14px 8px 0 0}button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#eef2f8;padding:18px;border-radius:8px}a{color:#244fad}#status{font-weight:600}</style>
+<h1>Agent Test Lab</h1><small>求职分析与自动化测试 · v0.1 · 本地单用户演示</small>
+<section><p>输入岗位与真实经历，查看技能提及、证据片段和面试练习题。资料中未检出某项技能，不代表你不会。</p>
+<form id="form"><label for="jd">岗位描述</label><textarea id="jd" rows="4" maxlength="10000" required>熟悉 Python、SQL，了解 RAG 和 FastAPI。</textarea>
+<label for="profile">项目经历 / 个人资料（可留空）</label><textarea id="profile" rows="4" maxlength="20000" placeholder="仅填写你确实做过的事情。">课程项目使用 Python 处理图像，使用 SQL 查询实验数据。</textarea>
+<label for="mode">运行模式</label><select id="mode"><option value="offline">离线规则模式 · 无需密钥</option><option value="llm">LLM 面试题 · 需服务端配置，会发送 JD 与检索资料</option></select><br>
+<button id="submit">生成报告</button><button type="button" id="history">查看最近报告</button> <a href="/docs">API 文档</a></form><p id="status" role="status"></p></section>
+<section><h2>分析结果</h2><div id="summary">生成报告后显示结果。</div><details><summary>完整 JSON / 工具调用记录</summary><pre id="output"></pre></details></section>
+<script>
+const $=id=>document.getElementById(id);
+function show(data){$('output').textContent=JSON.stringify(data,null,2);$('summary').replaceChildren();if(Array.isArray(data)){for(const r of data){const b=document.createElement('button');b.textContent='#'+r.id+' '+r.jd.slice(0,55);b.onclick=()=>show(r);$('summary').append(b)}if(!data.length)$('summary').textContent='暂无历史记录';return}const p=document.createElement('p');p.textContent='模式：'+data.mode+' ｜ 岗位技能：'+(data.required_skills.join('、')||'未检出')+' ｜ 耗时：'+data.duration_ms+' ms';$('summary').append(p);for(const q of data.questions){const item=document.createElement('p');item.textContent=q.question+'（引用：'+(q.evidence_ids.join('、')||'无，通用问题')+'）';$('summary').append(item)}const note=document.createElement('p');note.textContent='当前资料未检出：'+(data.unverified_skills.join('、')||'无');$('summary').append(note)}
+async function request(url,options){const r=await fetch(url,options);const data=await r.json();if(!r.ok)throw new Error(typeof data.detail==='string'?data.detail:JSON.stringify(data.detail));return data}
+$('form').onsubmit=async e=>{e.preventDefault();$('submit').disabled=true;$('status').textContent='正在分析…';try{const text=$('profile').value.trim();show(await request('/api/reports',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({jd:$('jd').value,documents:text?[{source:'个人资料',text}]:[],mode:$('mode').value})}));$('status').textContent='已生成并保存'}catch(e){$('status').textContent=e.message}finally{$('submit').disabled=false}};
+$('history').onclick=async()=>{try{show(await request('/api/reports'));$('status').textContent='最近20份报告'}catch(e){$('status').textContent=e.message}};
+</script></html>
