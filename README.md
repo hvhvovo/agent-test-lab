@@ -2,7 +2,6 @@
 
 一个从 Python JD Parser 学习项目演进而来的 **本地单用户、可运行的 v0.1 MVP**：使用 FastAPI、Pydantic 和 SQLite，围绕求职分析工作流建立自动化测试。默认无需 API Key；可选模型模式提供基于资料检索工具的面试题生成。
 
-> 本版本由 AI 辅助搭建，用于逐模块学习、调试和改进。它不代表作者已经独立掌握所有实现，也不宣称具备生产级能力。实际功能和未完成事项如下列示。
 
 ## 已实现
 
@@ -116,28 +115,4 @@ $env:LLM_API_KEY = "仅在你本机填写"
 - 单次处理最多20份、每份20000字符，JD最多10000字符；这是教学版限制。
 - 后续：真实标注集 → embedding 检索 → 输出质量评测 → 认证与部署。具体先做哪个，以能解释和验证为准。
 
-## Git 工作流程
 
-首次下载（需要先安装 Git）：
-
-```bash
-git clone https://github.com/hvhvovo/agent-test-lab.git
-cd agent-test-lab
-```
-
-修改代码并运行测试后，检查实际变更，再提交和推送：
-
-```bash
-git status
-git diff
-git add app/core.py tests/test_core.py
-git diff --cached
-git commit -m "fix: improve skill extraction with regression tests"
-git push
-```
-
-上面的 add 路径和提交说明是示例，应按实际修改填写。commit 记录本地版本，push 将提交发送到 GitHub。已有远程仓库从 clone 开始，不必重新 git init。
-
-提交前确认没有密钥、个人资料和数据库。推送后到仓库 Actions 查看实际测试结果；有配置文件不代表 CI 已通过。
-
-参考官方文档：[FastAPI testing](https://fastapi.tiangolo.com/tutorial/testing/)、[Pydantic validators](https://docs.pydantic.dev/latest/concepts/validators/)。
