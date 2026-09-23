@@ -4,6 +4,7 @@ import os
 import httpx
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from app.core import search_profile, select_questions
+from app.grounding import apply_guard
 
 class ProviderError(Exception):
     pass
@@ -60,7 +61,7 @@ class LLMProvider:
             raise ProviderError("模型请求失败或响应格式错误") from exc
 
 
-def generate_questions(jd, documents, provider):
+def generate_questions(jd, documents, provider, *, guard=True):
     messages = [
         {
             "role": "system",
@@ -90,6 +91,7 @@ def generate_questions(jd, documents, provider):
 
     trace = []
     allowed = set()
+    evidence = {}
     token_total = 0
 
     # 工具最多执行4次，额外留一轮供模型生成最终答案
@@ -126,7 +128,9 @@ def generate_questions(jd, documents, provider):
                             raise ValueError("unknown citation")
 
                 return (
-                    result.model_dump()["questions"],
+                    (apply_guard(
+                        result.model_dump()["questions"], evidence, jd) if guard
+                     else result.model_dump()["questions"]),
                     trace,
                     token_total
                 )
@@ -169,6 +173,7 @@ def generate_questions(jd, documents, provider):
             )
 
             allowed.update(hit["id"] for hit in hits)
+            evidence.update({hit["id"]: hit["text"] for hit in hits})
 
             trace.append({
                 "tool": "search_profile",

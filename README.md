@@ -9,7 +9,7 @@ Python · FastAPI · Pydantic · SQLite · pytest
 - **场景题库**：30 道题，覆盖工具调用、RAG 评测、接口测试、事务、并发、性能和安全。每题包含追问、考察点与常见误区，支持技能匹配和难度筛选。
 - **岗位分析**：统一技能词表、别名和边界匹配，展示资料中提及的技能及对应片段。
 - **面试复盘**：作答、展开追问、勾选自评要点，保存到历史报告并导出 JSON。
-- **模型出题**：可选 Chat Completions 兼容服务，通过只读检索工具获取资料；限制工具预算，校验参数、输出结构和引用 ID。
+- **模型出题**：可选 Chat Completions 兼容服务，通过只读检索工具获取资料；限制工具预算，校验参数、输出结构和引用 ID。对否定、计划和团队归属等可疑依据保守降级为假设场景题。
 - **测试与评测**：单元/API/数据库/Mock 测试，检索标注集、离线耗时统计、HTML/JUnit 报告与 CI 配置。
 
 题目示例：
@@ -69,7 +69,7 @@ $env:LLM_API_KEY = "仅在本机填写"
 
 macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `reports/tests.html`，CI 报告可从 [Actions](https://github.com/hvhvovo/agent-test-lab/actions) 下载。
 
-本地后端验证：**102 项通过，语句覆盖率 98.59%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
+本地后端验证：**114 项通过，语句覆盖率 98.70%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
 
 真实模型评测独立运行，需先配置模型并显式确认：
 
@@ -77,7 +77,7 @@ macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `repo
 .\.venv\Scripts\python.exe -m scripts.evaluate_llm --live
 ```
 
-结果按 8 个场景保存，需对照标注人工检查经历编造、否定和主体归属；Mock 通过率不作为真实模型质量指标。
+结果按 24 个合成场景保存，需对照标注人工检查经历编造、否定和主体归属；Mock 通过率不作为真实模型质量指标。
 
 ## 结构
 
@@ -95,4 +95,4 @@ macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `repo
 
 检索使用词项与技能别名，尚未使用向量数据库；只接收文本。技能提及无法可靠区分否定、计划与真实经验。复盘为用户自评；引用存在不保证语义正确。真实模型质量、并发容量与 Docker 运行仍需单独验证。
 
-[架构](docs/ARCHITECTURE.md) · [测试设计](docs/TEST_CASES.md) · [问题记录](docs/BUG_LOG.md) · [题库维护](docs/QUESTION_BANK.md)
+[经历误判复现与评测](docs/GROUNDING.md) · [架构](docs/ARCHITECTURE.md) · [测试设计](docs/TEST_CASES.md) · [问题记录](docs/BUG_LOG.md) · [题库维护](docs/QUESTION_BANK.md)

@@ -18,3 +18,4 @@ reports/*.json
 !reports/benchmark.json
 !reports/evaluation.json
 reports/*.png
+reports/*.tmp
