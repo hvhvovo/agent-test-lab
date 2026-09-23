@@ -1,8 +1,9 @@
 """可独立测试的规则提取、词项检索和证据匹配。无需网络。"""
 import re
+from app.question_bank import QUESTION_BANK
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-SKILLS = ["Python", "SQL", "FastAPI", "Git", "RAG", "pytest", "Docker", "Linux", "SQLite", "MCP", "C++"]
+SKILLS = ["Python", "SQL", "FastAPI", "Git", "RAG", "pytest", "Docker", "Linux", "SQLite", "MCP", "C++","Agent", "Function Calling"]
 
 class Document(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
@@ -73,6 +74,19 @@ def search_profile(query: str, documents: list[Document], top_k: int = 3) -> lis
             ranked.append({**chunk, "score": round(score, 4)})
     return sorted(ranked, key=lambda c: (-c["score"], c["id"]))[:top_k]
 
+def select_questions(jd):
+    selected = []
+
+    for item in QUESTION_BANK:
+        for skill in item["skills"]:
+            if skill.lower() in jd.lower():
+                selected.append({
+                    "question": item["question"],
+                    "evidence_ids": []
+                })
+                break
+
+    return selected
 
 def analyze(request: AnalysisRequest) -> dict:
     required = extract_skills(request.jd)
@@ -84,11 +98,13 @@ def analyze(request: AnalysisRequest) -> dict:
                                        for c in hits[:3]]})
     found = [e["skill"] for e in evidence if e["status"] == "mentioned"]
     gaps = [e["skill"] for e in evidence if e["status"] == "not_found"]
-    questions = [{"question": f"请结合实际经历解释你如何使用 {e['skill']}，以及如何验证结果。"
-                  if e["status"] == "mentioned" else f"你会如何学习并验证 {e['skill']} 的一个最小示例？",
-                  "evidence_ids": [c["id"] for c in e["citations"]]} for e in evidence[:5]]
+    questions = select_questions(request.jd)
+
     if not questions:
-        questions = [{"question": "请描述一个你实际完成的项目及验证方法。", "evidence_ids": []}]
+        questions = [{
+            "question": "请描述一个你实际完成的项目及验证方法。",
+            "evidence_ids": []
+        }]
     return {"jd": request.jd, "mode": "offline", "required_skills": required,
             "evidence": evidence, "mentioned_skills": found, "unverified_skills": gaps,
             "mention_coverage": len(found)/len(required) if required else None,

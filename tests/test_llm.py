@@ -34,9 +34,13 @@ def test_bad_model_outputs(message):
     with pytest.raises(ProviderError): generate_questions('Python',[],provider)
 
 def test_tool_budget():
-    provider=Mock(); provider.complete.return_value=(call(),{})
-    with pytest.raises(ProviderError,match='限定轮次'): generate_questions('Python',[],provider)
-    assert provider.complete.call_count==4
+    provider = Mock()
+    provider.complete.return_value = (call(), {})
+
+    with pytest.raises(ProviderError, match="工具调用次数超限"):
+        generate_questions("Python", [], provider)
+
+    assert provider.complete.call_count == 5
 
 def test_no_hit_can_only_use_empty_citations():
     provider=Mock();provider.complete.side_effect=[(call(),{}),(answer(),{})]
