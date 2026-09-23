@@ -1,24 +1,45 @@
-# 本次验证记录
+# v0.2 验证记录
 
-- 环境：Linux，Python 3.12.14，依赖见 requirements*.txt。
-- pytest：55 passed，2条依赖弃用警告；耗时0.90秒。
-- 后端语句覆盖率：234 / 237 = 98.73%。不包含前端JS，不包含分支覆盖率。
-- 模型：使用httpx.MockTransport/Mock测试，没有真实模型调用、没有产生API费用。
-- 真实LLM正确率、供应商兼容性、Docker、远程GitHub Actions、Windows/Python3.14均未验证。
-- 测试HTML和JUnit文件随项目ZIP提供；重新运行命令会生成本机的新报告。
+环境：Linux / Python 3.12.14。后端测试 **102 passed，2条依赖弃用警告**。
+语句覆盖率 349/354 = 98.59%，不包含前端JS和分支覆盖率。
+测试包含临时数据库与HTTP Mock，没有真实模型调用。通过率只适用于这批用例。
 
-## 本地微基准
+## 检索评测
 
-100次串行请求，5次预热，进程内TestClient，包含SQLite写入：中位1.328ms，P95 2.047ms，最大17.492ms。仅代表本次运行环境的离线微基准，不是公网延迟、并发容量或LLM耗时。原始汇总见 reports/benchmark.json，脚本可复现。
+12份固定合成资料、30条查询：开发集20条、留出诊断集10条。正例按片段ID宏平均；无答案单独计算。
 
-## 小型规则/检索检查
+| 集合 | 策略 | K | Recall@K | MRR@K |
+|---|---|---:|---:|---:|
+| dev | overlap_baseline | 1 | 78.89% | 0.9333 |
+| dev | overlap_baseline | 3 | 100.00% | 0.9667 |
+| dev | binary_bm25_aliases | 1 | 78.89% | 0.9333 |
+| dev | binary_bm25_aliases | 3 | 100.00% | 0.9667 |
+| holdout | overlap_baseline | 1 | 56.25% | 0.6250 |
+| holdout | overlap_baseline | 3 | 87.50% | 0.7292 |
+| holdout | binary_bm25_aliases | 1 | 56.25% | 0.6250 |
+| holdout | binary_bm25_aliases | 3 | 100.00% | 0.7917 |
 
-8条手写技能提取 smoke 样例 exact match 8/8；3条手写词项检索样例 Hit@1 3/3。样本极小且不是独立业务评测集，不用于宣称产品准确率。额外记录否定句反例，见 reports/evaluation.json。
+两种策略的无答案样例空结果率均为100%（开发5条，留出2条）。样例少、无答案查询偏容易；留出集由同一项目编写，不是外部独立基准。不能把100%召回当真实业务正确率。单条结果见 `reports/evaluation.json`。
+
+## 离线微基准
+
+TestClient进程内串行100次请求，5次预热，包含校验、分析、数据库写入和序列化。
+平均 2.784ms，中位 2.311ms，P95 3.181ms，P99 17.325ms；错误 0/100。
+不包含公网网络或真实模型，也不是并发容量测试。环境敏感，原始统计见 `reports/benchmark.json`。
+
+## 模型质量与部署
+
+8条真实模型检查样例已准备，尚未运行；工具选择正确率、语义依据正确率和真实模型延迟未测。
+Docker配置保留，尚未执行容器验证。远程CI以GitHub Actions具体运行结果为准。
 
 ## 复现
 
 ```bash
 python -m pytest --cov=app --cov-report=term-missing --junitxml=reports/junit.xml --html=reports/tests.html --self-contained-html
-python -m scripts.benchmark
 python -m scripts.evaluate
+python -m scripts.benchmark
 ```
+
+浏览器冒烟已通过：生成报告、保存自评、重载历史、导出 JSON、题库筛选与390px窄屏溢出检查；未发现JS异常。当前Linux环境缺少中文字体，未据此验证中文字形。
+
+此脚本默认pytest不收集。可在独立Python 3.12环境安装 `playwright==1.51.0`，执行 `python -m playwright install chromium --only-shell`，再运行 `python -m scripts.smoke_browser`。

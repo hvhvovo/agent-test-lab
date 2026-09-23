@@ -1,0 +1,288 @@
+{
+  "version": "1.0",
+  "scope": "人工编写的固定合成语料；开发集20条，留出诊断集10条；非真实求职分布",
+  "documents": [
+    {
+      "source": "api",
+      "text": "使用 Python、pytest 和 FastAPI 编写接口自动化测试，覆盖空输入、错误类型、分页与状态码。"
+    },
+    {
+      "source": "cv",
+      "text": "使用 Python 和 OpenCV 完成车牌图像预处理，比较 HSV 定位与边缘检测的失败样例。"
+    },
+    {
+      "source": "db",
+      "text": "使用 SQL 和 SQLite 保存报告，以事务回滚与参数绑定验证数据一致性和注入防护。"
+    },
+    {
+      "source": "agent",
+      "text": "为 Agent 的 search_profile 工具调用设置累计预算，使用 Mock 验证四次检索后收尾及第五次调用拦截。"
+    },
+    {
+      "source": "rag",
+      "text": "为 RAG 检索建立标注集，记录 Recall@3 和 MRR，分析切片边界与重叠对检索的影响。"
+    },
+    {
+      "source": "ci",
+      "text": "使用 GitHub Actions 在多个 Python 版本运行 pytest 回归测试，并保存 JUnit 和 HTML 报告。"
+    },
+    {
+      "source": "deploy",
+      "text": "使用 Docker 挂载持久卷保存 SQLite 数据，验证容器重建后的历史记录与非 root 写权限。"
+    },
+    {
+      "source": "perf",
+      "text": "记录 HTTP 接口平均延迟、P95、错误率与并发量，区分模型调用耗时和数据库写入时间。"
+    },
+    {
+      "source": "safe",
+      "text": "构造提示注入和跨用户越权测试，检查工具白名单、权限过滤以及日志中的敏感信息。"
+    },
+    {
+      "source": "llm",
+      "text": "Mock 模型返回的无效 JSON、超时和限流响应，验证输出 Schema、错误映射和失败不写库。"
+    },
+    {
+      "source": "neg",
+      "text": "尚未做过向量 RAG，计划学习 Embedding。目前只完成关键词检索。"
+    },
+    {
+      "source": "team",
+      "text": "团队负责部署，我只编写了接口测试，不负责 Docker 配置。"
+    }
+  ],
+  "cases": [
+    {
+      "id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "relevant_ids": [
+        "api:1"
+      ]
+    },
+    {
+      "id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "relevant_ids": [
+        "cv:1"
+      ]
+    },
+    {
+      "id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "relevant_ids": [
+        "db:1"
+      ]
+    },
+    {
+      "id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "relevant_ids": [
+        "agent:1"
+      ]
+    },
+    {
+      "id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "relevant_ids": [
+        "rag:1"
+      ]
+    },
+    {
+      "id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "relevant_ids": [
+        "ci:1"
+      ]
+    },
+    {
+      "id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "relevant_ids": [
+        "deploy:1"
+      ]
+    },
+    {
+      "id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "relevant_ids": [
+        "perf:1"
+      ]
+    },
+    {
+      "id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "relevant_ids": [
+        "safe:1"
+      ]
+    },
+    {
+      "id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "relevant_ids": [
+        "llm:1"
+      ]
+    },
+    {
+      "id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "relevant_ids": [
+        "api:1",
+        "ci:1"
+      ]
+    },
+    {
+      "id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "relevant_ids": [
+        "db:1",
+        "deploy:1"
+      ]
+    },
+    {
+      "id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "relevant_ids": [
+        "agent:1",
+        "llm:1"
+      ]
+    },
+    {
+      "id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "relevant_ids": [
+        "rag:1"
+      ]
+    },
+    {
+      "id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "relevant_ids": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ]
+    },
+    {
+      "id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "relevant_ids": []
+    },
+    {
+      "id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "relevant_ids": []
+    },
+    {
+      "id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "relevant_ids": []
+    },
+    {
+      "id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "relevant_ids": []
+    },
+    {
+      "id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "relevant_ids": []
+    },
+    {
+      "id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "relevant_ids": [
+        "agent:1"
+      ]
+    },
+    {
+      "id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "relevant_ids": [
+        "deploy:1"
+      ]
+    },
+    {
+      "id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "relevant_ids": [
+        "api:1",
+        "team:1"
+      ]
+    },
+    {
+      "id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "relevant_ids": [
+        "neg:1"
+      ]
+    },
+    {
+      "id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "relevant_ids": [
+        "llm:1"
+      ]
+    },
+    {
+      "id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "relevant_ids": [
+        "rag:1"
+      ]
+    },
+    {
+      "id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "relevant_ids": [
+        "safe:1"
+      ]
+    },
+    {
+      "id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "relevant_ids": [
+        "perf:1"
+      ]
+    },
+    {
+      "id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "relevant_ids": []
+    },
+    {
+      "id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "relevant_ids": []
+    }
+  ]
+}

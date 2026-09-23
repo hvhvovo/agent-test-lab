@@ -1,18 +1,27 @@
 # 测试设计
 
-| 范围 | 场景 | 预期 | 对应测试 |
-|---|---|---|---|
-| 提取 | 大小写、重复名单、顺序 | 规范名、去重、名单顺序 | test_extract |
-| 提取边界 | digital/MySQL/C++ | 不误匹配Git/SQL，C++可命中 | test_extract |
-| 输入 | 空白、None、错误类型、超长、额外字段 | 拒绝/422，不写库 | test_request_validation / test_invalid_api |
-| 证据 | 长文本跨分块、无证据、无技能 | 引用可定位；不推断能力；覆盖率null | test_chunk_long_document_and_evidence 等 |
-| 检索 | 多资料排名、无命中 | 正确source或空结果 | test_retrieval_ranking_and_no_hits |
-| 数据库 | 新建、读取、重新启动 | 记录不丢失 | test_create_read_persist |
-| 数据库 | SQL语句形文本 | 当作普通数据保存 | test_sql_content_is_data |
-| API | 分页、不存在、非法分页 | 正确次序、404/422 | test_history_pagination_and_missing |
-| 模型HTTP | 协议、超时、429、坏响应 | 请求正确、安全错误提示 | test_http_contract / test_http_errors |
-| 工具调用 | 检索后引用、未知工具、坏参数、超限 | 合法执行；非法拒绝 | test_tool_call_then_grounded_answer 等 |
-| 模型输出 | 非JSON、空题目、编造引用 | 拒绝，不作为成功结果 | test_bad_model_outputs |
-| 失败事务 | 模型失败 | 502，数据库仍为空 | test_provider_failure_not_saved |
+| 范围 | 要验证的行为 | 文件 |
+|---|---|---|
+| 技能与题库 | 边界、别名、多标签去重、难度筛选、技能覆盖、数据不被调用方修改 | test_question_bank.py |
+| 输入与证据 | 空白、类型、长度、未知字段、切片与引用、否定句已知限制 | test_core.py |
+| API 与数据库 | 创建、详情、分页、重启持久化、SQL作为数据、模型失败不写库 | test_api.py |
+| 模型适配 | 请求契约、超时、429、错误正文、未知工具、引用错误 | test_llm.py |
+| 调用预算 | 四次工具后正常收尾、第五次工具未执行 | test_agent_budget.py |
+| 多工具批次 | 非法批次零执行、一次四次调用、预算耗尽禁用工具、畸形输出 | test_llm_boundaries.py |
+| 复盘 | 重复保存更新、重启读取、无效要点、不存在的题目、空白答案 | test_practice.py |
+| 检索指标 | Recall与Precision区分、重复ID、无答案分母、标注引用合法性 | test_evaluation.py |
 
-所有测试均可离线执行。浏览器交互、真实供应商兼容性、真实模型质量、容器和CI执行不在本次已验证范围。
+默认测试不连接真实模型，数据库使用临时目录。102项通过表示上述样例通过，不表示模型语义准确率100%。
+
+## 检索评测
+
+`evals/retrieval.json` 固定12份合成资料、30个查询。20条开发样例以明确术语为主；10条留出诊断样例包括自然表达与无答案查询。当前策略在评测前确定，结果不用于反复修改留出样例。
+
+- Recall@K：前K个结果命中的相关片段数 / 标注相关片段数。按查询宏平均。
+- MRR@K：首个相关结果排名的倒数，无命中为0。
+- 无答案：相关集合为空时不计入Recall/MRR；单独统计返回空结果的比例。
+- 片段去重以ID为单位。当前样例规模小，无答案查询偏容易，不外推真实用户分布。
+
+## 真实模型检查
+
+`evals/grounding.json` 包含8个场景：否定、计划、职责归属、数字、注入、资料缺失、支持证据、错误引用前提。`scripts.evaluate_llm --live` 保存输出、工具轨迹、token、时间、人工判定空位。未执行前不填质量通过率；结构通过与内容通过分开统计。

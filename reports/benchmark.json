@@ -1,11 +1,15 @@
 {
-  "scope": "offline API via in-process TestClient, sequential, SQLite write included",
+  "scope": "offline API via in-process TestClient; includes request validation, analysis, SQLite write and serialization",
   "requests": 100,
   "warmup": 5,
   "concurrency": 1,
+  "errors": 0,
+  "error_rate": 0.0,
   "python": "3.12.14",
   "platform": "Linux",
-  "median_ms": 1.328,
-  "p95_ms": 2.047,
-  "max_ms": 17.492
+  "mean_ms": 2.784,
+  "median_ms": 2.311,
+  "p95_ms": 3.181,
+  "p99_ms": 17.325,
+  "max_ms": 28.868
 }

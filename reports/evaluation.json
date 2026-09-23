@@ -1,14 +1,3064 @@
 {
-  "extraction_cases": 8,
-  "exact_match": 1.0,
-  "retrieval_cases": 3,
-  "hit_at_1": 1.0,
-  "scope": "handwritten smoke examples; no live LLM quality evaluation",
-  "known_counterexample": {
-    "input": "不要求 Python",
-    "actual": [
-      "Python"
-    ],
-    "desired_semantic_required_skills": []
-  }
+  "dataset_version": "1.0",
+  "scope": "人工编写的固定合成语料；开发集20条，留出诊断集10条；非真实求职分布",
+  "case_count": 30,
+  "metric_unit": "chunk ID; macro average over answerable queries; no-answer cases reported separately",
+  "summary": [
+    {
+      "split": "dev",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "cases": 20,
+      "answerable_cases": 15,
+      "no_answer_cases": 5,
+      "macro_recall": 0.7889,
+      "mrr": 0.9333,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "dev",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "cases": 20,
+      "answerable_cases": 15,
+      "no_answer_cases": 5,
+      "macro_recall": 1.0,
+      "mrr": 0.9667,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "dev",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "cases": 20,
+      "answerable_cases": 15,
+      "no_answer_cases": 5,
+      "macro_recall": 1.0,
+      "mrr": 0.9667,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "dev",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "cases": 20,
+      "answerable_cases": 15,
+      "no_answer_cases": 5,
+      "macro_recall": 0.7889,
+      "mrr": 0.9333,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "dev",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "cases": 20,
+      "answerable_cases": 15,
+      "no_answer_cases": 5,
+      "macro_recall": 1.0,
+      "mrr": 0.9667,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "dev",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "cases": 20,
+      "answerable_cases": 15,
+      "no_answer_cases": 5,
+      "macro_recall": 1.0,
+      "mrr": 0.9667,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "holdout",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "cases": 10,
+      "answerable_cases": 8,
+      "no_answer_cases": 2,
+      "macro_recall": 0.5625,
+      "mrr": 0.625,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "holdout",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "cases": 10,
+      "answerable_cases": 8,
+      "no_answer_cases": 2,
+      "macro_recall": 0.875,
+      "mrr": 0.7292,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "holdout",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "cases": 10,
+      "answerable_cases": 8,
+      "no_answer_cases": 2,
+      "macro_recall": 1.0,
+      "mrr": 0.7604,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "holdout",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "cases": 10,
+      "answerable_cases": 8,
+      "no_answer_cases": 2,
+      "macro_recall": 0.5625,
+      "mrr": 0.625,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "holdout",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "cases": 10,
+      "answerable_cases": 8,
+      "no_answer_cases": 2,
+      "macro_recall": 1.0,
+      "mrr": 0.7917,
+      "no_answer_accuracy": 1
+    },
+    {
+      "split": "holdout",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "cases": 10,
+      "answerable_cases": 8,
+      "no_answer_cases": 2,
+      "macro_recall": 1.0,
+      "mrr": 0.7917,
+      "no_answer_accuracy": 1
+    }
+  ],
+  "details": [
+    {
+      "case_id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "api:1"
+      ],
+      "actual": [
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "api:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "api:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "team:1",
+        "cv:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "api:1"
+      ],
+      "actual": [
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "api:1"
+      ],
+      "actual": [
+        "api:1",
+        "team:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_01",
+      "split": "dev",
+      "query": "Python 接口自动化测试经历",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "api:1"
+      ],
+      "actual": [
+        "api:1",
+        "team:1",
+        "ci:1",
+        "cv:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "cv:1"
+      ],
+      "actual": [
+        "cv:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "cv:1"
+      ],
+      "actual": [
+        "cv:1",
+        "api:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "cv:1"
+      ],
+      "actual": [
+        "cv:1",
+        "api:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "cv:1"
+      ],
+      "actual": [
+        "cv:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "cv:1"
+      ],
+      "actual": [
+        "cv:1",
+        "ci:1",
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_02",
+      "split": "dev",
+      "query": "Python 图像处理",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "cv:1"
+      ],
+      "actual": [
+        "cv:1",
+        "ci:1",
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "db:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "db:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "db:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "db:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "db:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_03",
+      "split": "dev",
+      "query": "SQL 事务回滚",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "db:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1",
+        "perf:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1",
+        "perf:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1",
+        "perf:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_04",
+      "split": "dev",
+      "query": "Agent 工具调用次数上限",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1",
+        "perf:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_05",
+      "split": "dev",
+      "query": "RAG 检索评测指标",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1",
+        "api:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1",
+        "api:1",
+        "db:1",
+        "safe:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1",
+        "db:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_06",
+      "split": "dev",
+      "query": "持续集成测试报告",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1",
+        "db:1",
+        "team:1",
+        "api:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "db:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "db:1",
+        "perf:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "team:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_07",
+      "split": "dev",
+      "query": "Docker 数据持久化",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "team:1",
+        "db:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "perf:1",
+        "api:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "perf:1",
+        "api:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "perf:1",
+        "team:1",
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_08",
+      "split": "dev",
+      "query": "接口延迟 P95",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "perf:1",
+        "team:1",
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_09",
+      "split": "dev",
+      "query": "提示注入和越权",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "llm:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "llm:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "llm:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "llm:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "llm:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_10",
+      "split": "dev",
+      "query": "模型无效 JSON",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "llm:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "api:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "api:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "api:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "safe:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "api:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "api:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "team:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_11",
+      "split": "dev",
+      "query": "用 pytest 自动测试",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "api:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "team:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "db:1",
+        "deploy:1"
+      ],
+      "actual": [
+        "db:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "db:1",
+        "deploy:1"
+      ],
+      "actual": [
+        "db:1",
+        "deploy:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "db:1",
+        "deploy:1"
+      ],
+      "actual": [
+        "db:1",
+        "deploy:1",
+        "ci:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "db:1",
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "db:1",
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "db:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_12",
+      "split": "dev",
+      "query": "SQLite 数据保存",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "db:1",
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "db:1",
+        "ci:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "agent:1",
+        "llm:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "agent:1",
+        "llm:1"
+      ],
+      "actual": [
+        "agent:1",
+        "llm:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "agent:1",
+        "llm:1"
+      ],
+      "actual": [
+        "agent:1",
+        "llm:1",
+        "perf:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "agent:1",
+        "llm:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "agent:1",
+        "llm:1"
+      ],
+      "actual": [
+        "agent:1",
+        "llm:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_13",
+      "split": "dev",
+      "query": "Mock 工具调用和模型响应",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "agent:1",
+        "llm:1"
+      ],
+      "actual": [
+        "agent:1",
+        "llm:1",
+        "perf:1",
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "rag:1",
+        "agent:1",
+        "neg:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "rag:1",
+        "agent:1",
+        "neg:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "rag:1",
+        "neg:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_14",
+      "split": "dev",
+      "query": "检索切片边界",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "rag:1",
+        "neg:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1"
+      ],
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "cv:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ],
+      "actual": [
+        "api:1",
+        "ci:1",
+        "cv:1",
+        "agent:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1"
+      ],
+      "recall": 0.3333333333333333,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1",
+        "cv:1",
+        "api:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_15",
+      "split": "dev",
+      "query": "哪些项目使用 Python",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "api:1",
+        "cv:1",
+        "ci:1"
+      ],
+      "actual": [
+        "ci:1",
+        "cv:1",
+        "api:1",
+        "deploy:1",
+        "db:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_16",
+      "split": "dev",
+      "query": "Kubernetes",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_17",
+      "split": "dev",
+      "query": "FPGA",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_18",
+      "split": "dev",
+      "query": "CUDA",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_19",
+      "split": "dev",
+      "query": "温控 PID",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_20",
+      "split": "dev",
+      "query": "React Native",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_21",
+      "split": "holdout",
+      "query": "四次查资料后怎样结束任务",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "agent:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_22",
+      "split": "holdout",
+      "query": "重建容器后历史还在吗",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "deploy:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "api:1",
+        "team:1"
+      ],
+      "actual": [
+        "team:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "api:1",
+        "team:1"
+      ],
+      "actual": [
+        "team:1",
+        "api:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "api:1",
+        "team:1"
+      ],
+      "actual": [
+        "team:1",
+        "api:1",
+        "ci:1",
+        "neg:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "api:1",
+        "team:1"
+      ],
+      "actual": [
+        "team:1"
+      ],
+      "recall": 0.5,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "api:1",
+        "team:1"
+      ],
+      "actual": [
+        "team:1",
+        "api:1",
+        "neg:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_23",
+      "split": "holdout",
+      "query": "资料中谁做过接口测试",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "api:1",
+        "team:1"
+      ],
+      "actual": [
+        "team:1",
+        "api:1",
+        "neg:1",
+        "perf:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "neg:1"
+      ],
+      "actual": [
+        "neg:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "neg:1"
+      ],
+      "actual": [
+        "neg:1",
+        "agent:1",
+        "cv:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "neg:1"
+      ],
+      "actual": [
+        "neg:1",
+        "agent:1",
+        "cv:1",
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "neg:1"
+      ],
+      "actual": [
+        "neg:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "neg:1"
+      ],
+      "actual": [
+        "neg:1",
+        "cv:1",
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_24",
+      "split": "holdout",
+      "query": "我是否已经完成向量检索",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "neg:1"
+      ],
+      "actual": [
+        "neg:1",
+        "cv:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "perf:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "perf:1",
+        "db:1",
+        "deploy:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "perf:1",
+        "db:1",
+        "deploy:1",
+        "llm:1",
+        "ci:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.25,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "perf:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "perf:1",
+        "llm:1",
+        "deploy:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_25",
+      "split": "holdout",
+      "query": "模型请求失败时数据库会不会保存",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "llm:1"
+      ],
+      "actual": [
+        "perf:1",
+        "llm:1",
+        "deploy:1",
+        "db:1",
+        "cv:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "agent:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "agent:1",
+        "neg:1",
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "agent:1",
+        "neg:1",
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_26",
+      "split": "holdout",
+      "query": "怎样判断检索漏了相关内容",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "rag:1"
+      ],
+      "actual": [
+        "neg:1",
+        "rag:1",
+        "agent:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_27",
+      "split": "holdout",
+      "query": "如何保护不同用户的资料",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "safe:1"
+      ],
+      "actual": [
+        "safe:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 1.0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "deploy:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "perf:1",
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "deploy:1",
+        "perf:1",
+        "rag:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.5,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "rag:1"
+      ],
+      "recall": 0.0,
+      "reciprocal_rank": 0,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "rag:1",
+        "deploy:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_28",
+      "split": "holdout",
+      "query": "网页偶尔很慢该记录什么",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [
+        "perf:1"
+      ],
+      "actual": [
+        "rag:1",
+        "deploy:1",
+        "perf:1"
+      ],
+      "recall": 1.0,
+      "reciprocal_rank": 0.3333333333333333,
+      "empty_correct": null
+    },
+    {
+      "case_id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_29",
+      "split": "holdout",
+      "query": "Kafka 消息队列",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "strategy": "overlap_baseline",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "strategy": "overlap_baseline",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "strategy": "overlap_baseline",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "strategy": "binary_bm25_aliases",
+      "k": 1,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "strategy": "binary_bm25_aliases",
+      "k": 3,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    },
+    {
+      "case_id": "retrieval_30",
+      "split": "holdout",
+      "query": "iOS Swift",
+      "strategy": "binary_bm25_aliases",
+      "k": 5,
+      "expected": [],
+      "actual": [],
+      "recall": null,
+      "reciprocal_rank": null,
+      "empty_correct": true
+    }
+  ]
 }

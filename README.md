@@ -1,22 +1,26 @@
 # Agent Test Lab
 
-一个求职分析小工具，也是用来练习 AI 应用测试的项目。
+面向测试开发与 AI 测试的面试训练工具。输入岗位要求和项目材料，生成场景题、查看证据、记录回答与复盘。
 
-项目从一个提取 JD 技能关键词的 Python 脚本开始。目前可以输入岗位描述和项目经历，查看资料里提到了哪些技能、哪些还没有找到对应证据，并生成面试练习题。分析结果会保存在 SQLite 中，方便之后回看。
+Python · FastAPI · Pydantic · SQLite · pytest
 
-开发中关注两件事：功能能不能用，以及遇到空输入、模型超时、错误的工具调用时，程序能不能按预期处理。后端使用 FastAPI 和 Pydantic，测试使用 pytest。
+## 功能
 
-## 目前能做什么
+- **场景题库**：30 道题，覆盖工具调用、RAG 评测、接口测试、事务、并发、性能和安全。每题包含追问、考察点与常见误区，支持技能匹配和难度筛选。
+- **岗位分析**：统一技能词表、别名和边界匹配，展示资料中提及的技能及对应片段。
+- **面试复盘**：作答、展开追问、勾选自评要点，保存到历史报告并导出 JSON。
+- **模型出题**：可选 Chat Completions 兼容服务，通过只读检索工具获取资料；限制工具预算，校验参数、输出结构和引用 ID。
+- **测试与评测**：单元/API/数据库/Mock 测试，检索标注集、离线耗时统计、HTML/JUnit 报告与 CI 配置。
 
-默认使用离线模式，不需要 API Key。技能匹配和资料检索通过规则完成，面试题使用模板生成。
+题目示例：
 
-配置模型后，可以切换到 LLM 模式。模型能够调用 `search_profile` 检索本次提交的资料，再根据检索结果生成面试题。程序会检查返回格式和引用 ID，并限制调用轮次。这个模式目前只用于面试题生成，技能分析仍然使用规则。
+> 模型连续四次检索后触发轮次上限，最后一次结果还没用于回答。怎样分别设计模型轮次与工具次数预算？
+>
+> 资料写着“尚未做过 RAG”，模型却问“你在 RAG 项目中如何优化召回”。引用 ID 是真的，怎样定位并评测这个问题？
 
-例如，岗位要求 Python、SQL 和 RAG，而项目资料只提到了 Python，报告会列出 Python 的相关片段，并将 SQL、RAG 标为“当前资料未检出”。这个结果用来帮助补充材料，不代表实际掌握程度。
+## 运行
 
-## 本地运行
-
-先下载代码，进入项目目录：
+克隆仓库，或下载 ZIP 并解压，进入含 `README.md` 的目录。
 
 ```bash
 git clone https://github.com/hvhvovo/agent-test-lab.git
@@ -39,66 +43,56 @@ python3 -m venv .venv
 .venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 
-启动后打开 [演示页面](http://127.0.0.1:8000)，可以直接用页面里的示例生成报告。[接口文档](http://127.0.0.1:8000/docs) 支持手动发送请求。停止服务按 Ctrl+C。
+打开 [训练页面](http://127.0.0.1:8000) 或 [API 文档](http://127.0.0.1:8000/docs)。默认题库模式无需密钥。可先用 `熟悉 Python、pytest、RAG 和 Agent` 生成报告，写下回答后保存复盘。
 
-报告保存在 `data/reports.sqlite3`，该目录已加入 Git 忽略规则。目前适合在本机使用，还没有登录和用户隔离功能。
+数据库位于 `data/reports.sqlite3`，重启服务会保留历史。升级前备份旧的 `data` 目录；复盘表会自动创建。当前为本地单用户版本，不直接开放到公网。
 
-### 接入模型（可选）
+### 模型模式
 
-需要一个支持工具调用的 Chat Completions 兼容服务。在启动服务的同一个 PowerShell 窗口中设置：
+在启动服务的同一个 PowerShell 窗口设置：
 
 ```powershell
 $env:LLM_BASE_URL = "https://你的服务地址/v1"
 $env:LLM_MODEL = "你的模型名"
-$env:LLM_API_KEY = "你的密钥"
+$env:LLM_API_KEY = "仅在本机填写"
 ```
 
-随后启动服务，在页面选择 LLM 模式。`.env.example` 仅供参考，程序不会自动读取 `.env` 文件。
+服务需要支持 `tools` 和 `tool_choice`。程序读取环境变量，不自动加载 `.env`。模型模式会发送 JD 和检索片段，可能产生费用；密钥、个人材料和数据库不要提交到仓库。
 
-调用时会将 JD 和检索到的资料片段发送给模型服务，可能产生费用。密钥只在本机配置，不要提交到仓库。
-
-## 测试
-
-测试覆盖技能提取、输入校验、API、数据库读写，以及模型响应和工具调用的异常情况。测试中的模型请求使用 Mock，数据库使用临时文件，可以离线运行。
-
-在项目根目录执行（Windows）：
+## 验证
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest --cov=app --cov-report=term-missing --junitxml=reports/junit.xml --html=reports/tests.html --self-contained-html
-```
-
-macOS / Linux 将命令开头替换为 `.venv/bin/python`。运行后，用浏览器打开 `reports/tests.html` 查看报告。
-
-已记录的一次本地测试结果为 **55 项通过，后端语句覆盖率 98.73%**，环境是 Linux / Python 3.12.14。这个数字不包含前端交互，也不代表模型回答质量。详细记录见 [测试结果](docs/TEST_RESULTS.md)，远程运行情况见仓库的 [Actions](https://github.com/hvhvovo/agent-test-lab/actions)。
-
-另外提供两个脚本，分别检查少量手写检索样例和记录离线接口耗时：
-
-```powershell
 .\.venv\Scripts\python.exe -m scripts.evaluate
 .\.venv\Scripts\python.exe -m scripts.benchmark
 ```
 
-结果写入 `reports/`。耗时测试通过进程内 TestClient 串行执行，尚未做并发压测或真实模型性能测试。
+macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `reports/tests.html`，CI 报告可从 [Actions](https://github.com/hvhvovo/agent-test-lab/actions) 下载。
 
-## 代码在哪里
+本地后端验证：**102 项通过，语句覆盖率 98.59%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
 
-| 路径 | 内容 |
-| --- | --- |
-| `app/core.py` | 技能提取、文本分块、检索和规则分析 |
-| `app/llm.py` | 模型请求、工具调用和输出校验 |
-| `app/storage.py` | SQLite 报告存储 |
-| `app/main.py` | FastAPI 接口 |
-| `app/index.html` | 演示页面 |
-| `tests/` | 单元测试和 API 测试 |
-| `scripts/` | 检索评测、接口耗时统计 |
-| `docs/` | 架构、测试用例和问题记录 |
+真实模型评测独立运行，需先配置模型并显式确认：
 
-接口包括 `GET /health`、`POST /api/reports`、`GET /api/reports` 和 `GET /api/reports/{id}`。请求字段和示例可以在启动后的接口文档中查看。
+```powershell
+.\.venv\Scripts\python.exe -m scripts.evaluate_llm --live
+```
 
-## 还需要改进的地方
+结果按 8 个场景保存，需对照标注人工检查经历编造、否定和主体归属；Mock 通过率不作为真实模型质量指标。
 
-最明显的问题是关键词规则不能理解语义。例如“不要求 Python”仍然会提取出 Python，也无法区分必备技能和加分项。资料检索目前按词项匹配，只支持纯文本，还没有接入向量检索或 PDF 解析。
+## 结构
 
-LLM 部分已经有协议和异常处理测试，但还没有做真实模型的回答质量评测。引用 ID 正确，也不能保证回答准确使用了那段资料。
+| 目录 / 文件 | 内容 |
+|---|---|
+| `app/question_bank.py` | 场景题、追问、考察点 |
+| `app/skills.py` | 共用技能与别名匹配 |
+| `app/core.py` | 选题、分块、二值 BM25 检索、证据分析 |
+| `app/llm.py` | 模型适配、工具预算、整批参数预检 |
+| `app/main.py` / `storage.py` | API 与 SQLite 存储 |
+| `tests/` | 自动化测试 |
+| `evals/` / `scripts/` | 标注集、评测和微基准 |
 
-接下来准备先整理有代表性的测试样例，再逐步改进技能提取和资料检索。具体问题记在 [Bug 记录](docs/BUG_LOG.md) 中，测试设计和架构分别见 [测试用例](docs/TEST_CASES.md) 与 [系统架构](docs/ARCHITECTURE.md)。
+## 当前边界
+
+检索使用词项与技能别名，尚未使用向量数据库；只接收文本。技能提及无法可靠区分否定、计划与真实经验。复盘为用户自评；引用存在不保证语义正确。真实模型质量、并发容量与 Docker 运行仍需单独验证。
+
+[架构](docs/ARCHITECTURE.md) · [测试设计](docs/TEST_CASES.md) · [问题记录](docs/BUG_LOG.md) · [题库维护](docs/QUESTION_BANK.md)
