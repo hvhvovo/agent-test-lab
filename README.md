@@ -69,7 +69,7 @@ $env:LLM_API_KEY = "仅在本机填写"
 
 macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `reports/tests.html`，CI 报告可从 [Actions](https://github.com/hvhvovo/agent-test-lab/actions) 下载。
 
-本地后端验证：**132 项通过，语句覆盖率 98.76%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
+本地后端验证：**139 项通过，语句覆盖率 98.56%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
 
 真实模型评测独立运行，需先配置模型并显式确认：
 
@@ -96,3 +96,15 @@ macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `repo
 检索使用词项与技能别名，尚未使用向量数据库；只接收文本。技能提及无法可靠区分否定、计划与真实经验。复盘为用户自评；引用存在不保证语义正确。真实模型质量、并发容量与 Docker 运行仍需单独验证。
 
 [经历误判复现与评测](docs/GROUNDING.md) · [架构](docs/ARCHITECTURE.md) · [测试设计](docs/TEST_CASES.md) · [问题记录](docs/BUG_LOG.md) · [题库维护](docs/QUESTION_BANK.md)
+
+### DeepSeek 单条真实试跑
+
+```powershell
+.\.venv\Scripts\python.exe -m scripts.smoke_deepseek
+```
+
+运行时隐藏输入密钥，不写入文件。固定使用官方 `deepseek-flash`、关闭思考模式，仅跑第一条合成样例，每轮最多2000输出Token，最多5轮模型请求，无自动重试。此限制不是人民币硬预算，输入也计费；具体扣费以平台账单为准。输出超过上限时明确报截断，不静默重试。
+
+结果保存到本机 `reports/live-grounding-时间.json`；查看 raw、guarded、trace、usage_by_response。成功返回不代表一定调用了工具，trace为空时说明该次没有执行检索。真实效果需要按criterion人工评分。
+
+通用评测可使用 `--limit 1 --max-output-tokens 2000`，支持thinking参数的服务另加 `--disable-thinking`。不支持该参数的服务不要添加。

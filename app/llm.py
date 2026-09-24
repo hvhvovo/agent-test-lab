@@ -30,8 +30,15 @@ TOOL = {"type": "function", "function": {
     "parameters": SearchArgs.model_json_schema()}}
 
 class LLMProvider:
-    def __init__(self, transport=None):
+    def __init__(self, transport=None, *, max_tokens=None, thinking=None):
+        if max_tokens is not None and (type(max_tokens) is not int or not 1 <= max_tokens <= 8192):
+            raise ValueError("max_tokens must be an integer between 1 and 8192")
+        if thinking not in (None, "disabled"):
+            raise ValueError("only disabled thinking override is supported")
         self.transport = transport
+        self.max_tokens = max_tokens
+        self.thinking = thinking
+        self.usage_records = []
 
     def complete(self, messages, *, allow_tools=True):
         key = os.getenv("LLM_API_KEY", "")
@@ -41,12 +48,17 @@ class LLMProvider:
             raise ProviderError("LLM 模式需要配置 LLM_API_KEY、LLM_MODEL、LLM_BASE_URL")
         if not base.startswith("https://"):
             raise ProviderError("LLM_BASE_URL 必须使用 HTTPS")
+        payload = {"model": model, "messages": messages, "tools": [TOOL],
+                   "tool_choice": "auto" if allow_tools else "none", "temperature": 0}
+        if self.max_tokens is not None:
+            payload["max_tokens"] = self.max_tokens
+        if self.thinking is not None:
+            payload["thinking"] = {"type": self.thinking}
         try:
-            with httpx.Client(timeout=20, transport=self.transport) as client:
+            with httpx.Client(timeout=30, transport=self.transport) as client:
                 response = client.post(base + "/chat/completions",
                     headers={"Authorization": f"Bearer {key}"},
-                    json={"model": model, "messages": messages, "tools": [TOOL],
-                          "tool_choice": "auto" if allow_tools else "none", "temperature": 0})
+                    json=payload)
                 response.raise_for_status()
                 data = response.json()
                 message = data["choices"][0]["message"]
@@ -55,6 +67,12 @@ class LLMProvider:
                 usage = data.get("usage") or {}
                 if not isinstance(usage, dict):
                     raise ValueError("invalid usage")
+                self.usage_records.append({k: v for k, v in usage.items()
+                    if k in {"prompt_tokens", "completion_tokens", "total_tokens",
+                             "prompt_cache_hit_tokens", "prompt_cache_miss_tokens"}
+                    and type(v) is int and v >= 0})
+                if data["choices"][0].get("finish_reason") == "length":
+                    raise ProviderError("模型输出达到长度上限，结果可能被截断；未自动重试")
                 return message, usage
         except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
             # 不把供应商响应、密钥或原始文档写到错误提示里。
