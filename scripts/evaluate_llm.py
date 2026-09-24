@@ -30,6 +30,11 @@ def summarize(rows):
                            'pass_rate_reviewed_only': mean(r['review'][variant] for r in reviewed) if reviewed else None}
     result['fallback_fraction_completed'] = (mean(any('grounding_guard' in q for q in r['guarded'])
                                                  for r in completed) if completed else None)
+    topic_reviewed = [r for r in completed if type(r.get('topic_preserved')) is bool]
+    result['topic_preservation'] = {
+        'reviewed': len(topic_reviewed), 'pending': len(completed)-len(topic_reviewed),
+        'pass_rate_reviewed_only': mean(r['topic_preserved'] for r in topic_reviewed) if topic_reviewed else None,
+    }
     return result
 
 
@@ -59,6 +64,8 @@ def main():
         parser.error('输出文件已存在，请使用新文件名')
     metadata = {'started_utc': stamp, 'model': os.environ['LLM_MODEL'], 'python': platform.python_version(),
                 'dataset_sha256': digest(args.dataset), 'llm_code_sha256': digest(ROOT/'app/llm.py'),
+                'topics_sha256': digest(ROOT/'app/topics.py'),
+                'question_bank_sha256': digest(ROOT/'app/question_bank.py'),
                 'guard_version': GUARD_VERSION, 'guard_sha256': digest(ROOT/'app/grounding.py'),
                 'repeat': args.repeat, 'temperature': 0,
                 'scope': '同一模型原始输出的配对后处理；人工评分，不是独立模型A/B测试',
@@ -72,7 +79,7 @@ def main():
         for case in cases:
             started = time.perf_counter()
             docs = [Document(source=case['id'], text=case['profile'])]
-            row = {**case, 'repeat': repeat+1, 'review': {'raw': None, 'guarded': None}, 'review_notes': ''}
+            row = {**case, 'repeat': repeat+1, 'review': {'raw': None, 'guarded': None}, 'topic_preserved': None, 'review_notes': ''}
             try:
                 qs, trace, tokens = generate_questions(case['jd'], docs, LLMProvider(), guard=False)
                 retrieved = {cid for t in trace for cid in t['result_ids']}

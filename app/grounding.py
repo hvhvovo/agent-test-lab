@@ -1,9 +1,9 @@
 """保守降级：可疑资料不用于经历追问；这是词法防线，不是语义证明。"""
 import re
 from copy import deepcopy
-from app.core import select_questions
+from app.topics import scenario_for
 
-GUARD_VERSION = 'lexical-fallback-v1'
+GUARD_VERSION = 'topic-fallback-v2'
 RISK_PATTERNS = {
     'negation': r'尚未|未做|没做|未使用|没有.*经验|未进行|不会|从未|\b(?:never|not|no experience|haven.t)\b',
     'plan': r'计划|打算|准备学习|希望学习|\b(?:plan|planning|intend|will learn)\b',
@@ -14,9 +14,8 @@ RISK_PATTERNS = {
 
 def apply_guard(questions, evidence, jd):
     """同一原始输出做前后对照；只信任本次工具实际返回的片段。"""
-    seeds = select_questions(jd)
     output = []
-    for index, original in enumerate(questions):
+    for original in questions:
         q = deepcopy(original)
         ids = q.get('evidence_ids', [])
         reasons = []
@@ -32,17 +31,14 @@ def apply_guard(questions, evidence, jd):
             reasons = [name for name, pattern in RISK_PATTERNS.items()
                        if re.search(pattern, text, re.I)]
         if reasons:
-            if seeds:
-                seed = seeds[index % len(seeds)]
-                q = {key: deepcopy(seed.get(key, [])) for key in
-                     ('question', 'follow_ups', 'checkpoints')}
-                q['question'] = '假设场景（不代表你的经历）：' + q['question']
-            else:
-                q = {'question': '假设一个接口偶发超时：你会收集哪些日志，怎样区分网络、服务和数据库耗时，并验证修复？',
-                     'follow_ups': ['如何设计可重复的故障注入？'],
-                     'checkpoints': ['拆分耗时', '控制变量', '回归验证']}
+            topic, seed, template_id = scenario_for(original['question'])
+            q = {key: deepcopy(seed.get(key, [])) for key in
+                 ('question', 'follow_ups', 'checkpoints')}
+            q['question'] = '假设场景（不代表你的经历）：' + q['question']
             q.update(evidence_ids=[], grounding_guard={'version': GUARD_VERSION,
-                     'action': 'scenario_fallback', 'reasons': reasons})
+                     'action': 'scenario_fallback', 'reasons': reasons,
+                     'topic': topic, 'topic_status': 'matched' if topic else 'unclassified',
+                     'template_id': template_id})
         output.append(q)
     # 多题降级可能指向同一道种子题，去重而不伪造题目数量。
     return list({q['question']: q for q in output}.values())
