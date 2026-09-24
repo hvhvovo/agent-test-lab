@@ -18,7 +18,7 @@ from app.grounding import apply_guard
  ('你如何降低P95延迟？','latency'),
 ])
 def test_topic_preserved_on_fallback(question, topic):
-    out=apply_guard([{'question':question,'evidence_ids':['d:1']}],{'d:1':'尚未做过这些项目'},'无关的 Python 岗位')
+    out=apply_guard([{'question':'你已完成的项目中，'+question,'evidence_ids':['d:1']}],{'d:1':'尚未做过这些项目'},'无关的 Python 岗位')
     assert out[0]['grounding_guard']['topic']==topic
     assert out[0]['grounding_guard']['topic_status']=='matched'
     assert out[0]['evidence_ids']==[]
