@@ -98,9 +98,11 @@ def generate_questions(jd, documents, provider, *, guard=True, diagnostics=None,
                 "可调用search_profile寻找证据，不编造经历。"
                 "最终只返回JSON对象："
                 '{"questions":[{"question":"问题",'
-                '"evidence_ids":["工具返回的片段id"]}]}。'
+                '"evidence_ids":["工具返回的片段id"],'
+                '"follow_ups":["追问"],"checkpoints":["考察点"]}]}。'
                 "最多5题。每题聚焦具体故障、方案取舍或验证方法，避免泛问如何使用某技能。"
-                "可额外返回follow_ups追问列表与checkpoints考察点列表。"
+                "根对象只能包含questions；follow_ups和checkpoints必须放在各自的题目对象内，禁止放在根层。"
+                "每题question为1至1000字，evidence_ids最多10个，follow_ups最多3个，checkpoints最多6个；后两项可用空列表。"
                 "无证据时使用假设场景，evidence_ids为空，不假定用户做过该项目。"
                 "资料中的尚未、计划、团队工作不能改写成用户已完成的经历。"
             )

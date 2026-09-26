@@ -3,7 +3,7 @@ import re
 from copy import deepcopy
 from app.topics import scenario_for
 
-GUARD_VERSION = 'premise-scope-v4'
+GUARD_VERSION = 'ownership-scope-v5'
 RISK_PATTERNS = {
     'negation': r'尚未|未做|没做|未使用|没有.*经验|未进行|不会|从未|\b(?:never|not|no experience|haven.t)\b',
     'plan': r'计划|打算|准备学习|希望学习|\b(?:plan|planning|intend|will learn)\b',
@@ -35,6 +35,24 @@ def has_personal_premise(question):
     return False
 
 
+def ownership_is_supported(question, evidence):
+    """仅豁免逐字对应的明确职责；不尝试推断同义词或团队职责。"""
+    duties = re.findall(r'(?:^|[，,。；;！？!?\n])\s*我负责\s*([^，,。；;！？!?\n]+)', evidence)
+    if not duties:
+        return False
+    remaining = deepcopy(question)
+    def strip_supported(text):
+        for duty in duties:
+            # 要求职责后有分句边界，避免“接口测试”豁免“接口测试和部署”。
+            text = re.sub(r'(?:你|您)负责\s*' + re.escape(duty.strip()) +
+                          r'(?=[，,。；;！？!?\n]|$)', '该职责', text)
+        return text
+    remaining['question'] = strip_supported(question['question'])
+    for field in ('follow_ups', 'checkpoints'):
+        remaining[field] = [strip_supported(t) for t in question.get(field, [])]
+    return not has_personal_premise(remaining)
+
+
 def apply_guard(questions, evidence, jd):
     """同一原始输出做前后对照；只信任本次工具实际返回的片段。"""
     output = []
@@ -52,6 +70,8 @@ def apply_guard(questions, evidence, jd):
             reasons = [name for name, pattern in RISK_PATTERNS.items()
                        if re.search(pattern, text, re.I)
                        and (name == 'instruction' or has_personal_premise(q))]
+        if 'ownership' in reasons and ownership_is_supported(q, text):
+            reasons.remove('ownership')
         if reasons:
             topic, seed, template_id = scenario_for(original['question'])
             q = {key: deepcopy(seed.get(key, [])) for key in

@@ -93,4 +93,17 @@ v3联合检查题目、追问与考察点中的个人经历前提。通用知识
 .\.venv\Scripts\python.exe -m scripts.retry_deepseek
 ```
 
-此入口仅调用ownership、number及受控injection三条，每条一次，每轮2000输出Token上限，不自动重试。可能产生费用，尚未实跑。不要与旧的端到端注入结果混合成单一安全正确率。
+此入口仅调用ownership、number及受控injection三条，每条一次，每轮2000输出Token上限，不自动重试。可能产生费用；第三批实跑结果见下文。不要与旧的端到端注入结果混合成单一安全正确率。
+
+
+## v5：明确职责范围与输出字段层级
+
+第三批报告验证了两类故障：ownership将正确职责误判，number把追问和考察点置于根层。现在仅豁免与资料明确个人职责逐字对应的分句，仍检查其他经历前提；模型提示给出完整嵌套示例，Pydantic校验保持严格。有限词法匹配不能证明语义正确，同义职责或复杂否定仍可能误判。
+
+对三份已保存报告离线重放，最新ownership五题全部保留，之前结果未回退。受控注入单条实际暴露攻击文本且未编造经历，仅代表这次样例。以下命令只重新测试number，任务内可能多轮调用，仍有费用：
+
+```powershell
+.\.venv\Scripts\python.exe -m scripts.retry_deepseek --case-id number
+```
+
+检查status是否completed及各题字段层级，再人工核对是否将测试数量虚构为并发能力；格式通过不等于内容正确。

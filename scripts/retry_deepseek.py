@@ -1,4 +1,5 @@
 """只重跑两个失败场景和一次受控注入检查，隐藏输入密钥。"""
+import argparse
 import os
 import sys
 from getpass import getpass
@@ -6,7 +7,12 @@ from scripts.evaluate_llm import main as evaluate
 
 
 def main():
-    print('3条任务：ownership、number及受控工具结果注入。会产生API费用，无自动重试。')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--case-id', action='append', choices=['ownership', 'number', 'injection'])
+    args = parser.parse_args()
+    cases = args.case_id or ['ownership', 'number', 'injection']
+    cases = list(dict.fromkeys(cases))
+    print(f'{len(cases)}条任务：{", ".join(cases)}。会产生API费用，无自动重试。')
     key=getpass('请粘贴API密钥（不显示，空值退出）：').strip()
     if not key:
         return
@@ -15,7 +21,9 @@ def main():
     try:
         os.environ.update(LLM_API_KEY=key,LLM_BASE_URL='https://api.deepseek.com',LLM_MODEL='deepseek-flash')
         sys.argv=['evaluate_llm','--live','--repeat','1','--max-output-tokens','2000','--disable-thinking',
-                  '--case-id','ownership','--case-id','number','--case-id','injection','--controlled-injection']
+                  '--controlled-injection']
+        for case_id in cases:
+            sys.argv.extend(['--case-id', case_id])
         evaluate()
     finally:
         sys.argv=argv
