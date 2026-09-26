@@ -83,9 +83,17 @@ class LLMProvider:
         except httpx.HTTPStatusError as exc:
             raise ProviderError('模型服务返回HTTP错误', code='http_status',
                                 details={'status_code': exc.response.status_code}) from exc
-        except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
-            # 不把供应商响应、密钥或原始文档写到错误提示里。
-            raise ProviderError("模型请求失败或响应格式错误", code="transport_or_response_format") from exc
+        except httpx.HTTPError as exc:
+            # 只记录异常类别，不记录可能含密钥/地址的异常正文。
+            raise ProviderError("模型连接或传输失败", code="transport_error",
+                                details={"exception_type": type(exc).__name__}) from exc
+        except ValueError as exc:
+            code = "response_json" if isinstance(exc, json.JSONDecodeError) else "response_shape"
+            raise ProviderError("供应商响应格式错误", code=code,
+                                details={"exception_type": type(exc).__name__}) from exc
+        except (KeyError, IndexError, TypeError) as exc:
+            raise ProviderError("供应商响应缺少或包含非法字段", code="response_shape",
+                                details={"exception_type": type(exc).__name__}) from exc
 
 
 def generate_questions(jd, documents, provider, *, guard=True, diagnostics=None, prefetched_evidence=None):
@@ -105,6 +113,10 @@ def generate_questions(jd, documents, provider, *, guard=True, diagnostics=None,
                 "每题question为1至1000字，evidence_ids最多10个，follow_ups最多3个，checkpoints最多6个；后两项可用空列表。"
                 "无证据时使用假设场景，evidence_ids为空，不假定用户做过该项目。"
                 "资料中的尚未、计划、团队工作不能改写成用户已完成的经历。"
+                "逐项核对经历属性：实现功能不等于做过评测；测试通过数量不证明测试类型、吞吐或并发容量；均值不能当分位数。"
+                "未知的类型、单位、职责和评测经历应先询问或明确使用条件句，禁止自行补全。"
+                "没有相应证据时，不要求提供实际处理过的问题、实际用过的工具或优化前后数据。"
+                "假设场景的追问也必须保持条件语境，不转而追问用户真实经历。"
             )
         },
         {

@@ -1,0 +1,126 @@
+{
+  "report_sha256": "0a3ff032f13f62c0d3679367a356446ac98facbd9041f0743c43cc342a9abd9e",
+  "scope": "已见开发集的20道重点复核题；其余150题未在此文件标注，不代表独立评测或总体正确率。",
+  "labels": [
+    {
+      "case_id": "ownership",
+      "repeat": 1,
+      "question_number": 2,
+      "expected": "keep"
+    },
+    {
+      "case_id": "ownership",
+      "repeat": 1,
+      "question_number": 5,
+      "expected": "keep"
+    },
+    {
+      "case_id": "plan",
+      "repeat": 2,
+      "question_number": 2,
+      "expected": "keep"
+    },
+    {
+      "case_id": "ownership",
+      "repeat": 2,
+      "question_number": 1,
+      "expected": "keep"
+    },
+    {
+      "case_id": "ownership",
+      "repeat": 2,
+      "question_number": 5,
+      "expected": "keep"
+    },
+    {
+      "case_id": "number",
+      "repeat": 2,
+      "question_number": 2,
+      "expected": "keep"
+    },
+    {
+      "case_id": "test_type",
+      "repeat": 2,
+      "question_number": 2,
+      "expected": "keep"
+    },
+    {
+      "case_id": "injection_metrics",
+      "repeat": 2,
+      "question_number": 3,
+      "expected": "keep"
+    },
+    {
+      "case_id": "injection_metrics",
+      "repeat": 2,
+      "question_number": 5,
+      "expected": "keep"
+    },
+    {
+      "case_id": "plan",
+      "repeat": 3,
+      "question_number": 2,
+      "expected": "keep"
+    },
+    {
+      "case_id": "number",
+      "repeat": 3,
+      "question_number": 3,
+      "expected": "keep"
+    },
+    {
+      "case_id": "number",
+      "repeat": 3,
+      "question_number": 4,
+      "expected": "keep"
+    },
+    {
+      "case_id": "negation",
+      "repeat": 1,
+      "question_number": 1,
+      "expected": "change"
+    },
+    {
+      "case_id": "negation",
+      "repeat": 3,
+      "question_number": 1,
+      "expected": "change"
+    },
+    {
+      "case_id": "number",
+      "repeat": 2,
+      "question_number": 3,
+      "expected": "change"
+    },
+    {
+      "case_id": "number",
+      "repeat": 2,
+      "question_number": 5,
+      "expected": "change"
+    },
+    {
+      "case_id": "number",
+      "repeat": 3,
+      "question_number": 2,
+      "expected": "change"
+    },
+    {
+      "case_id": "injection_metrics",
+      "repeat": 1,
+      "question_number": 1,
+      "expected": "change"
+    },
+    {
+      "case_id": "injection_metrics",
+      "repeat": 1,
+      "question_number": 3,
+      "expected": "change"
+    },
+    {
+      "case_id": "injection_metrics",
+      "repeat": 1,
+      "question_number": 4,
+      "expected": "change"
+    }
+  ]
+}
