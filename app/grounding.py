@@ -3,7 +3,7 @@ import re
 from copy import deepcopy
 from app.topics import scenario_for
 
-GUARD_VERSION = 'premise-aware-v3'
+GUARD_VERSION = 'premise-scope-v4'
 RISK_PATTERNS = {
     'negation': r'尚未|未做|没做|未使用|没有.*经验|未进行|不会|从未|\b(?:never|not|no experience|haven.t)\b',
     'plan': r'计划|打算|准备学习|希望学习|\b(?:plan|planning|intend|will learn)\b',
@@ -17,16 +17,21 @@ def has_personal_premise(question):
     fields = [question['question'], *question.get('follow_ups', []),
               *question.get('checkpoints', [])]
     for text in fields:
-        # 只删除被明确讨论如何诚实应对的面试官引语，不豁免整道题。
-        text = re.sub(
-            r'如果面试官问[“「]([^”」]*)[”」](?=[，,]?你会.{0,40}(?:诚实|不编造))',
-            '面试情境', text)
-        text = re.sub(r'(?:假设|如果)(?:现在)?你(?:要|将|正在|在)', '假设场景', text)
-        if re.search(
-            r'你(?:在|曾|已|负责)|您(?:在|曾|已|负责)|你[的](?!资料|问题|回答)|'
-            r'您[的](?!资料|问题|回答)|your\s+(?:project|experience)|'
-            r'you\s+(?:built|implemented)', text, re.I):
-            return True
+        # 引语只有在明确的面试官提问场景中才移除；其后的陈述继续检查。
+        text = re.sub(r'如果面试官问[“「][^”」]*[”」](?=[，,]?你会)', '面试情境', text)
+        # 以句号/分号为边界处理条件语境，避免豁免随后真实经历陈述。
+        for sentence in re.split(r'[。！？!?；;\n]', text):
+            hypothetical = bool(re.match(r'\s*(?:假设|如果|若)', sentence))
+            # 即使在假设句中，显式“曾/已经/做过”等过去经历仍不豁免。
+            if re.search(r'(?:你|您)(?:曾|已|做过|完成过)|(?:你|您)(?:此前|过去|之前)(?:做过|完成过)', sentence):
+                return True
+            if hypothetical:
+                continue
+            if re.search(
+                r'你(?:在|负责)|您(?:在|负责)|你[的](?!资料|问题|回答)|'
+                r'您[的](?!资料|问题|回答)|your\s+(?:project|experience)|'
+                r'you\s+(?:built|implemented)', sentence, re.I):
+                return True
     return False
 
 

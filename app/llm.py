@@ -7,7 +7,11 @@ from app.core import search_profile, select_questions
 from app.grounding import apply_guard
 
 class ProviderError(Exception):
-    pass
+    def __init__(self, message, *, code="provider_error", details=None):
+        super().__init__(message)
+        self.code = code
+        self.details = details or {}
+
 
 class SearchArgs(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
@@ -74,12 +78,17 @@ class LLMProvider:
                 if data["choices"][0].get("finish_reason") == "length":
                     raise ProviderError("模型输出达到长度上限，结果可能被截断；未自动重试")
                 return message, usage
+        except httpx.TimeoutException as exc:
+            raise ProviderError('模型请求超时', code='timeout') from exc
+        except httpx.HTTPStatusError as exc:
+            raise ProviderError('模型服务返回HTTP错误', code='http_status',
+                                details={'status_code': exc.response.status_code}) from exc
         except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
             # 不把供应商响应、密钥或原始文档写到错误提示里。
-            raise ProviderError("模型请求失败或响应格式错误") from exc
+            raise ProviderError("模型请求失败或响应格式错误", code="transport_or_response_format") from exc
 
 
-def generate_questions(jd, documents, provider, *, guard=True):
+def generate_questions(jd, documents, provider, *, guard=True, diagnostics=None, prefetched_evidence=None):
     messages = [
         {
             "role": "system",
@@ -116,6 +125,20 @@ def generate_questions(jd, documents, provider, *, guard=True):
     max_tool_calls = 4
     max_model_rounds = max_tool_calls + 1
 
+    # 受控评测夹具：直接提供工具结果，不能算模型自主检索成功。
+    if prefetched_evidence is not None:
+        hits = prefetched_evidence
+        allowed.update(h['id'] for h in hits)
+        evidence.update({h['id']: h['text'] for h in hits})
+        args = {'query': jd, 'top_k': min(5, max(1, len(hits)))}
+        messages.extend([
+            {'role':'assistant', 'content':None, 'tool_calls':[{'id':'eval_fixture', 'type':'function',
+             'function':{'name':'search_profile','arguments':json.dumps(args)}}]},
+            {'role':'tool','tool_call_id':'eval_fixture','content':json.dumps(hits,ensure_ascii=False)}])
+        trace.append({'tool':'search_profile','arguments':args,'result_ids':[h['id'] for h in hits],
+                      'source':'controlled_fixture'})
+        max_model_rounds = max_tool_calls  # 夹具占用一次工具预算。
+
     for _ in range(max_model_rounds):
         message, usage = provider.complete(messages, allow_tools=len(trace) < max_tool_calls)
         if not isinstance(message, dict) or not isinstance(usage, dict):
@@ -131,32 +154,31 @@ def generate_questions(jd, documents, provider, *, guard=True):
         if not isinstance(calls, list):
             raise ProviderError("工具调用格式错误")
 
-        # 没有工具调用，说明模型正在提交最终答案
+        # 诊断仅由本机评测显式传入，普通API调用不保存原始输出。
+        if diagnostics is not None:
+            diagnostics.append({'stage': 'model_response', 'message': message,
+                                'retrieved_ids': sorted(allowed), 'trace': list(trace)})
         if not calls:
+            content = message.get('content')
             try:
-                result = QuestionSet.model_validate_json(
-                    message.get("content") or ""
-                )
-
-                if len({q.question for q in result.questions}) != len(result.questions):
-                    raise ValueError("duplicate question")
-                for question in result.questions:
-                    for citation_id in question.evidence_ids:
-                        if citation_id not in allowed:
-                            raise ValueError("unknown citation")
-
-                return (
-                    (apply_guard(
-                        result.model_dump()["questions"], evidence, jd) if guard
-                     else result.model_dump()["questions"]),
-                    trace,
-                    token_total
-                )
-
-            except (ValidationError, ValueError, TypeError) as exc:
-                raise ProviderError(
-                    "模型输出未通过结构或引用校验"
-                ) from exc
+                parsed = json.loads(content)
+            except (ValueError, TypeError) as exc:
+                raise ProviderError('模型输出不是有效JSON', code='invalid_json') from exc
+            try:
+                result = QuestionSet.model_validate(parsed)
+            except ValidationError as exc:
+                fields = [{'location': list(e['loc']), 'type': e['type']}
+                          for e in exc.errors(include_input=False, include_context=False, include_url=False)]
+                raise ProviderError('模型输出字段校验失败', code='schema_validation',
+                                    details={'fields': fields}) from exc
+            if len({q.question for q in result.questions}) != len(result.questions):
+                raise ProviderError('模型输出包含重复题目', code='duplicate_questions')
+            unknown = sorted({cid for q in result.questions for cid in q.evidence_ids if cid not in allowed})
+            if unknown:
+                raise ProviderError('模型引用了未检索到的片段', code='unknown_citation',
+                                    details={'unknown_ids': unknown, 'allowed_ids': sorted(allowed)})
+            return ((apply_guard(result.model_dump()['questions'], evidence, jd) if guard
+                     else result.model_dump()['questions']), trace, token_total)
 
         # 执行前检查预算，禁止第5次工具调用
         if not isinstance(calls, list):

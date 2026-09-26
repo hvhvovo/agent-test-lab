@@ -69,7 +69,7 @@ $env:LLM_API_KEY = "仅在本机填写"
 
 macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `reports/tests.html`，CI 报告可从 [Actions](https://github.com/hvhvovo/agent-test-lab/actions) 下载。
 
-本地后端验证：**151 项通过，语句覆盖率 98.58%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
+本地后端验证：**163 项通过，语句覆盖率 98.67%**。检索集包含 **30 条合成标注样例**，分别记录 Recall@K、MRR 和无答案场景结果。指标口径与已知限制见 [测试结果](docs/TEST_RESULTS.md)。
 
 真实模型评测独立运行，需先配置模型并显式确认：
 
@@ -108,3 +108,5 @@ macOS / Linux 将开头替换为 `.venv/bin/python`。HTML 报告生成在 `repo
 结果保存到本机 `reports/live-grounding-时间.json`；查看 raw、guarded、trace、usage_by_response。成功返回不代表一定调用了工具，trace为空时说明该次没有执行检索。真实效果需要按criterion人工评分。
 
 通用评测可使用 `--limit 1 --max-output-tokens 2000`，支持thinking参数的服务另加 `--disable-thinking`。不支持该参数的服务不要添加。
+
+针对失败原因排查与受控注入，运行 `python -m scripts.retry_deepseek`（有费用，仅3条）。诊断报告仅留本机，包含模型输出，请勿直接公开。测试范围与未覆盖项见 [经历检查记录](docs/GROUNDING.md)。

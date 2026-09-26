@@ -24,12 +24,15 @@ def summarize(rows):
               'request_failure_rate': (len(rows)-len(completed))/len(rows) if rows else None,
               'mean_attempt_ms': mean(r['duration_ms'] for r in rows) if rows else None,
               'reported_tokens_completed_only': sum(r.get('tokens', 0) for r in completed)}
+    eligible = [r for r in completed if r.get('category') != 'injection' or r.get('profile_exposed') is True]
+    result['injection_not_exposed'] = sum(r.get('category') == 'injection' and r.get('profile_exposed') is not True for r in completed)
     for variant in ('raw', 'guarded'):
-        reviewed = [r for r in completed if type(r.get('review', {}).get(variant)) is bool]
-        result[variant] = {'reviewed': len(reviewed), 'pending': len(completed)-len(reviewed),
+        reviewed = [r for r in eligible if type(r.get('review', {}).get(variant)) is bool]
+        result[variant] = {'reviewed': len(reviewed), 'pending': len(eligible)-len(reviewed),
                            'pass_rate_reviewed_only': mean(r['review'][variant] for r in reviewed) if reviewed else None}
     result['fallback_fraction_completed'] = (mean(any('grounding_guard' in q for q in r['guarded'])
                                                  for r in completed) if completed else None)
+    result['usage_tokens_all_returned'] = sum(u.get('total_tokens',0) for r in rows for u in r.get('usage_by_response',[]))
     topic_reviewed = [r for r in completed if type(r.get('topic_preserved')) is bool]
     result['topic_preservation'] = {
         'reviewed': len(topic_reviewed), 'pending': len(completed)-len(topic_reviewed),
@@ -41,6 +44,8 @@ def summarize(rows):
 def main():
     parser = argparse.ArgumentParser(description='真实模型配对评测；--live 会产生 API 费用')
     parser.add_argument('--live', action='store_true')
+    parser.add_argument('--case-id', action='append', help='仅运行指定ID，可重复使用')
+    parser.add_argument('--controlled-injection', action='store_true', help='注入类别用固定工具结果暴露攻击，不代表端到端检索')
     parser.add_argument('--limit', type=int, help='只运行前N条样例')
     parser.add_argument('--max-output-tokens', type=int, help='每轮输出上限，1至8192')
     parser.add_argument('--disable-thinking', action='store_true', help='仅限支持thinking参数的服务，如DeepSeek')
@@ -61,6 +66,11 @@ def main():
     cases = json.loads(args.dataset.read_text(encoding='utf-8'))
     if not cases or len({c['id'] for c in cases}) != len(cases):
         parser.error('数据集为空或样例ID重复')
+    if args.case_id:
+        requested = set(args.case_id)
+        if not requested <= {c['id'] for c in cases}:
+            parser.error('存在未知case-id')
+        cases = [c for c in cases if c['id'] in requested]
     if args.limit is not None:
         if not 1 <= args.limit <= len(cases):
             parser.error('--limit 必须在1与样例总数之间')
@@ -76,7 +86,7 @@ def main():
                 'topics_sha256': digest(ROOT/'app/topics.py'),
                 'question_bank_sha256': digest(ROOT/'app/question_bank.py'),
                 'guard_version': GUARD_VERSION, 'guard_sha256': digest(ROOT/'app/grounding.py'),
-                'repeat': args.repeat, 'temperature': 0, 'case_ids': [c['id'] for c in cases],
+                'controlled_injection': args.controlled_injection, 'repeat': args.repeat, 'temperature': 0, 'case_ids': [c['id'] for c in cases],
                 'max_output_tokens': args.max_output_tokens,
                 'thinking': 'disabled' if args.disable_thinking else 'provider_default',
                 'scope': '同一模型原始输出的配对后处理；人工评分，不是独立模型A/B测试',
@@ -93,17 +103,29 @@ def main():
             row = {**case, 'repeat': repeat+1, 'review': {'raw': None, 'guarded': None}, 'topic_preserved': None, 'review_notes': ''}
             provider = LLMProvider(max_tokens=args.max_output_tokens,
                                    thinking='disabled' if args.disable_thinking else None)
+            diagnostics = []
+            controlled = args.controlled_injection and case.get('category') == 'injection'
             try:
-                qs, trace, tokens = generate_questions(case['jd'], docs, provider, guard=False)
+                options = {'guard': False, 'diagnostics': diagnostics}
+                if controlled:
+                    options['prefetched_evidence'] = chunks(docs)
+                qs, trace, tokens = generate_questions(case['jd'], docs, provider, **options)
                 retrieved = {cid for t in trace for cid in t['result_ids']}
                 evidence = {c['id']: c['text'] for c in chunks(docs) if c['id'] in retrieved}
                 row.update(status='completed', raw=qs, guarded=apply_guard(qs, evidence, case['jd']),
                            trace=trace, tokens=tokens)
             except ProviderError as exc:
-                row.update(status='failed', error=str(exc))
+                row.update(status='failed', error=str(exc), error_code=exc.code, error_details=exc.details)
+            row['diagnostics'] = diagnostics
+            row['exposure_mode'] = 'controlled_tool_result' if controlled else 'end_to_end'
+            observed_trace = row.get('trace') or (diagnostics[-1]['trace'] if diagnostics else [])
+            row['profile_exposed'] = any(t['result_ids'] for t in observed_trace)
             row['usage_by_response'] = provider.usage_records
             row['duration_ms'] = round((time.perf_counter()-started)*1000, 3)
             rows.append(row)
+            # 防止模型偶然回显密钥；诊断仍可能含个人资料，只保存在本机。
+            row = json.loads(json.dumps(row, ensure_ascii=False).replace(os.environ['LLM_API_KEY'], '[REDACTED]'))
+            rows[-1] = row
             payload = {'metadata': metadata, 'summary': summarize(rows), 'results': rows}
             temporary = output.with_suffix('.tmp')
             temporary.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding='utf-8')
