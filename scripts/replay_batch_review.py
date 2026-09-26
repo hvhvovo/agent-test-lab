@@ -11,7 +11,7 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('report',type=Path)
     args=parser.parse_args()
-    labels=json.loads((Path(__file__).resolve().parents[1]/'evals/batch_review_v1.json').read_text())
+    labels=json.loads((Path(__file__).resolve().parents[1]/'evals/batch_review_v1.json').read_text(encoding='utf-8-sig'))
     content=args.report.read_bytes()
     if hashlib.sha256(content).hexdigest()!=labels['report_sha256']:
         parser.error('报告与标注版本不一致；不按相同题号套用其他报告')
